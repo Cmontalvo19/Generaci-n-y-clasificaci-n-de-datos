@@ -7,28 +7,34 @@ public class GenerateInfoFiles {
 
     public static void main(String[] args) {
         try {
-            createSalesMenFile(10, "Juan Perez", 123456789);
-            createProductsFile(10);
+            // Generar archivos de prueba
+            createProductsFile(100); // Aseguramos que haya suficientes productos
             createSalesManInfoFile(10);
+            createSalesMenFiles(10, 10); // Generamos archivos de ventas para 10 vendedores con 10 ventas cada uno
             System.out.println("Archivos generados exitosamente.");
         } catch (IOException e) {
             System.err.println("Error al generar los archivos: " + e.getMessage());
         }
     }
 
-    public static void createSalesMenFile(int randomSalesCount, String name, long id) throws IOException {
-        String fileName = "sales_" + id + ".txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write("CC;" + id + "\n");
-            Random random = new Random();
-            for (int i = 0; i < randomSalesCount; i++) {
-                int productId = random.nextInt(100) + 1;
-                int quantitySold = random.nextInt(50) + 1;
-                writer.write(productId + ";" + quantitySold + ";\n");
+    // Método para generar un archivo de ventas de un vendedor
+    public static void createSalesMenFiles(int salesmanCount, int randomSalesCount) throws IOException {
+        Random random = new Random();
+        for (int i = 0; i < salesmanCount; i++) {
+            long id = 1000000000L + i;
+            String fileName = "sales_" + id + ".txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                writer.write("CC;" + id + "\n");
+                for (int j = 0; j < randomSalesCount; j++) {
+                    int productId = random.nextInt(100) + 1; // IDs de productos entre 1 y 100
+                    int quantitySold = random.nextInt(50) + 1;
+                    writer.write(productId + ";" + quantitySold + ";\n");
+                }
             }
         }
     }
 
+    // Método para generar un archivo con información de productos
     public static void createProductsFile(int productsCount) throws IOException {
         String fileName = "products.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
@@ -42,6 +48,7 @@ public class GenerateInfoFiles {
         }
     }
 
+    // Método para generar un archivo con información de vendedores
     public static void createSalesManInfoFile(int salesmanCount) throws IOException {
         String fileName = "salesmen_info.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
